@@ -1,4 +1,4 @@
-//state 변경이 없을 경우, 렌더링 방지
+//동시에 여러 setState가 실행될 때, render가 2번 실행됨 => 좋지 않은 코드
 let setStateCounter = 0;
 const states = [];
 // let state = undefined;
@@ -25,28 +25,22 @@ function useState(initVal) {
   return [state, setState];
 }
 
-function Counter() {
-  const [count, setCount] = useState(1); //[1, setState()=>{}]
-  //DOM에서 onclick 이벤트 발생시 호출
-  // window.counter = () => setCount(count + 1);
-  window.nochange = () => setCount(1);
+function multiChange() {
+  const [count, setCount] = useState(1);
+  const [dog, setDog] = useState('멍1');
+
+  function multiChange(num){
+    setCount(num);
+    setDog('멍!'+ num);
+  }
+
+  window.increment = () => multiChange(count+1);
+  window.decrement = () => multiChange(count-1);
 
   return `<div>
-    <span>count: ${count}</span>
-    <button onclick="nochange()">No Change</button>
-  </div>`;
-}
-
-function Dog() {
-  const [dog, setDog] = useState('강아지');
-
-  //DOM에서 onclick 이벤트 발생시 호출
-  // window.sound = () => setDog(dog + '멍!');
-  window.nochange_dog = () => setDog('강아지');
-
-  return `<div>
-  <span>count: ${dog}</span>
-    <button onclick="nochange_dog()">sound</button>
+    <div>${count}번 ${dog}</div>
+    <button onClick="increment()">increment</button>
+    <button onClick="decrement()">decrement</button>
   </div>`;
 }
 
@@ -57,8 +51,7 @@ function render(){
     <div>
       <span>renderCount: ${renderCount}</span>
     </div>
-    <div>${Counter()}<div>
-    <div>${Dog()}</div>`;
+    <div>${multiChange()}<div>`;
     renderCount+=1;
     setStateCounter = 0;
 }
