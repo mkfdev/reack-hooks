@@ -33,13 +33,13 @@ function multiChange() {
   const [count, setCount] = useState(1);
   const [dog, setDog] = useState('멍1');
 
-  function multiChange(num){
+  function countDog(num){
     setCount(num);
     setDog('멍!'+ num);
   }
 
-  window.increment = () => multiChange(count+1);
-  window.decrement = () => multiChange(count-1);
+  window.increment = () => countDog(count+1);
+  window.decrement = () => countDog(count-1);
 
   return `<div>
     <div>${count}번 ${dog}</div>
@@ -71,6 +71,6 @@ const render = requestFrame(() => {
     <div>${multiChange()}<div>`;
     renderCount+=1;
     setStateCounter = 0;
-}, 100);
+});
 
 render();
